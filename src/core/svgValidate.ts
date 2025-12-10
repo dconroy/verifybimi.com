@@ -9,7 +9,7 @@
  * - Artwork within safe padding area
  */
 
-import type { ValidationResult } from './types';
+import type { ValidationResult, ValidationCheck } from './types';
 
 /**
  * Validates an SVG string against BIMI requirements
@@ -19,7 +19,10 @@ export function validateBimiSvg(svg: string): ValidationResult {
     valid: true,
     errors: [],
     warnings: [],
+    checks: [],
   };
+
+  const checks: ValidationCheck[] = [];
 
   try {
     const parser = new DOMParser();
@@ -29,14 +32,19 @@ export function validateBimiSvg(svg: string): ValidationResult {
     if (!svgElement) {
       result.valid = false;
       result.errors.push('No SVG element found');
+      checks.push({ name: 'SVG element exists', passed: false, message: 'No SVG element found' });
+      result.checks = checks;
       return result;
     }
+    checks.push({ name: 'SVG element exists', passed: true });
 
     // Check viewBox is square
     const viewBox = svgElement.getAttribute('viewBox');
     if (!viewBox) {
       result.valid = false;
       result.errors.push('SVG must have a viewBox attribute');
+      checks.push({ name: 'Has viewBox attribute', passed: false, message: 'SVG must have a viewBox attribute' });
+      result.checks = checks;
       return result;
     }
 
@@ -44,6 +52,8 @@ export function validateBimiSvg(svg: string): ValidationResult {
     if (viewBoxValues.length !== 4) {
       result.valid = false;
       result.errors.push('Invalid viewBox format');
+      checks.push({ name: 'Valid viewBox format', passed: false, message: 'Invalid viewBox format' });
+      result.checks = checks;
       return result;
     }
 
@@ -51,12 +61,18 @@ export function validateBimiSvg(svg: string): ValidationResult {
     if (width !== height) {
       result.valid = false;
       result.errors.push(`ViewBox is not square: ${width}x${height}`);
+      checks.push({ name: 'Square viewBox', passed: false, message: `ViewBox is not square: ${width}x${height}` });
+    } else {
+      checks.push({ name: 'Square viewBox', passed: true, message: `${width}x${height}` });
     }
 
     // Check minimum size (64x64)
     if (width < 64 || height < 64) {
       result.valid = false;
       result.errors.push(`ViewBox size ${width}x${height} is below minimum 64x64`);
+      checks.push({ name: 'Minimum size (64x64)', passed: false, message: `Size ${width}x${height} is below minimum` });
+    } else {
+      checks.push({ name: 'Minimum size (64x64)', passed: true, message: `${width}x${height}` });
     }
 
     // Check for raster images
@@ -64,6 +80,9 @@ export function validateBimiSvg(svg: string): ValidationResult {
     if (images.length > 0) {
       result.valid = false;
       result.errors.push(`Found ${images.length} <image> tag(s). BIMI requires vector-only SVG`);
+      checks.push({ name: 'No raster images', passed: false, message: `Found ${images.length} <image> tag(s)` });
+    } else {
+      checks.push({ name: 'No raster images', passed: true });
     }
 
     // Check for scripts
@@ -71,6 +90,9 @@ export function validateBimiSvg(svg: string): ValidationResult {
     if (scripts.length > 0) {
       result.valid = false;
       result.errors.push(`Found ${scripts.length} <script> tag(s). Scripts are not allowed in BIMI SVG`);
+      checks.push({ name: 'No scripts', passed: false, message: `Found ${scripts.length} <script> tag(s)` });
+    } else {
+      checks.push({ name: 'No scripts', passed: true });
     }
 
     // Check for foreignObject
@@ -78,6 +100,9 @@ export function validateBimiSvg(svg: string): ValidationResult {
     if (foreignObjects.length > 0) {
       result.valid = false;
       result.errors.push(`Found ${foreignObjects.length} <foreignObject> tag(s). Foreign objects are not allowed`);
+      checks.push({ name: 'No foreign objects', passed: false, message: `Found ${foreignObjects.length} <foreignObject> tag(s)` });
+    } else {
+      checks.push({ name: 'No foreign objects', passed: true });
     }
 
     // Check for background
@@ -118,15 +143,23 @@ export function validateBimiSvg(svg: string): ValidationResult {
     if (!hasBackground) {
       result.valid = false;
       result.errors.push('No solid background shape found covering the entire viewBox');
+      checks.push({ name: 'Solid background', passed: false, message: 'No background shape found' });
     } else if (backgroundHasAlpha) {
       result.valid = false;
       result.errors.push('Background color has transparency (alpha channel). BIMI requires opaque background');
+      checks.push({ name: 'Opaque background', passed: false, message: 'Background has transparency' });
+    } else {
+      checks.push({ name: 'Solid background', passed: true });
+      checks.push({ name: 'Opaque background', passed: true });
     }
 
     // Check for title element (recommended/required by some BIMI validators)
     const titleElement = svgElement.querySelector('title');
     if (!titleElement || !titleElement.textContent?.trim()) {
       result.warnings.push('SVG missing <title> element. Some BIMI validators require a title for accessibility.');
+      checks.push({ name: 'Has title element', passed: false, message: 'Missing <title> element (recommended)' });
+    } else {
+      checks.push({ name: 'Has title element', passed: true });
     }
 
     // Check artwork bounding box (approximate)
@@ -184,8 +217,10 @@ export function validateBimiSvg(svg: string): ValidationResult {
   } catch (error) {
     result.valid = false;
     result.errors.push(`Validation error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    checks.push({ name: 'Validation completed', passed: false, message: error instanceof Error ? error.message : 'Unknown error' });
   }
 
+  result.checks = checks;
   return result;
 }
 

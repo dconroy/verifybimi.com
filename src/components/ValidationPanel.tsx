@@ -50,8 +50,21 @@ export function ValidationPanel({ validation }: ValidationPanelProps) {
         </div>
       )}
 
-      {validation.valid && validation.errors.length === 0 && validation.warnings.length === 0 && (
-        <p className="validation-success">All BIMI requirements met! ✓</p>
+      {validation.checks && validation.checks.length > 0 && (
+        <div className="validation-checklist">
+          <h4>BIMI Compliance Checklist</h4>
+          <ul className="checklist">
+            {validation.checks.map((check, index) => (
+              <li key={index} className={check.passed ? 'check-passed' : 'check-failed'}>
+                <span className="check-icon">{check.passed ? '✓' : '✗'}</span>
+                <span className="check-name">{check.name}</span>
+                {check.message && (
+                  <span className="check-message">{check.message}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </div>
   );

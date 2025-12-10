@@ -490,6 +490,68 @@
   font-weight: 500;
 }
 
+.validation-checklist {
+  margin-top: 1.5rem;
+}
+
+.validation-checklist h4 {
+  color: #2e7d32;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}
+
+.checklist {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.checklist li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  background: #f5f5f5;
+  transition: background 0.2s;
+}
+
+.checklist li.check-passed {
+  background: #e8f5e9;
+}
+
+.checklist li.check-failed {
+  background: #ffebee;
+}
+
+.check-icon {
+  font-size: 1.2rem;
+  font-weight: bold;
+  min-width: 20px;
+  text-align: center;
+}
+
+.check-passed .check-icon {
+  color: #2e7d32;
+}
+
+.check-failed .check-icon {
+  color: #c62828;
+}
+
+.check-name {
+  font-weight: 500;
+  flex: 1;
+  color: #333;
+}
+
+.check-message {
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+}
+
 /* Download Section */
 .download-section {
   background: white;

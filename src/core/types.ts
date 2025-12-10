@@ -12,9 +12,16 @@ export type ConvertOptions = {
   title?: string;                // SVG title element (for accessibility/BIMI compliance)
 };
 
+export type ValidationCheck = {
+  name: string;
+  passed: boolean;
+  message?: string;
+};
+
 export type ValidationResult = {
   valid: boolean;
   errors: string[];
   warnings: string[];
+  checks?: ValidationCheck[]; // Checklist of all validation checks
 };
 
