@@ -42,9 +42,12 @@ export function ValidationPanel({ validation }: ValidationPanelProps) {
       {validation.warnings.length > 0 && (
         <div className="validation-warnings">
           <h4>Warnings</h4>
-          <ul>
+          <ul className="checklist">
             {validation.warnings.map((warning, index) => (
-              <li key={index}>{warning}</li>
+              <li key={index} className="check-warning">
+                <span className="check-icon">!</span>
+                <span className="check-name">{warning}</span>
+              </li>
             ))}
           </ul>
         </div>

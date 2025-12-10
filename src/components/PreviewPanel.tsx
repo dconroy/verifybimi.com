@@ -24,8 +24,10 @@ export function PreviewPanel({ originalFile, originalPreview, bimiSvg }: Preview
         <div className="preview-item">
           <h4>Original</h4>
           {originalPreview ? (
-            <div className="preview-container" style={{ transform: `scale(${zoom})` }}>
-              <img src={originalPreview} alt="Original logo" />
+            <div className="preview-container">
+              <div style={{ transform: `scale(${zoom})`, transformOrigin: 'center center', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <img src={originalPreview} alt="Original logo" />
+              </div>
             </div>
           ) : (
             <div className="preview-placeholder">
@@ -37,28 +39,26 @@ export function PreviewPanel({ originalFile, originalPreview, bimiSvg }: Preview
         <div className="preview-item">
           <h4>BIMI Version</h4>
           {bimiSvg ? (
-            <>
-              <div className="preview-modes">
-                <div className="preview-mode">
-                  <div className="preview-mode-label">Light Mode</div>
+            <div className="preview-modes">
+              <div className="preview-mode">
+                <div className="preview-mode-label">Light Mode</div>
+                <div className="preview-container preview-light">
                   <div 
-                    className="preview-container preview-light" 
-                    style={{ transform: `scale(${zoom})` }}
-                  >
-                    <div dangerouslySetInnerHTML={{ __html: bimiSvg }} />
-                  </div>
-                </div>
-                <div className="preview-mode">
-                  <div className="preview-mode-label">Dark Mode</div>
-                  <div 
-                    className="preview-container preview-dark" 
-                    style={{ transform: `scale(${zoom})` }}
-                  >
-                    <div dangerouslySetInnerHTML={{ __html: bimiSvg }} />
-                  </div>
+                    style={{ transform: `scale(${zoom})`, transformOrigin: 'center center', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    dangerouslySetInnerHTML={{ __html: bimiSvg }}
+                  />
                 </div>
               </div>
-            </>
+              <div className="preview-mode">
+                <div className="preview-mode-label">Dark Mode</div>
+                <div className="preview-container preview-dark">
+                  <div 
+                    style={{ transform: `scale(${zoom})`, transformOrigin: 'center center', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    dangerouslySetInnerHTML={{ __html: bimiSvg }}
+                  />
+                </div>
+              </div>
+            </div>
           ) : (
             <div className="preview-placeholder">
               Convert to see BIMI version
@@ -69,4 +69,3 @@ export function PreviewPanel({ originalFile, originalPreview, bimiSvg }: Preview
     </div>
   );
 }
-

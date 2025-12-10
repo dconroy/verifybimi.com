@@ -48,13 +48,15 @@ export function normalizeSvg(
   if (originalViewBox) {
     const viewBoxValues = originalViewBox.split(/\s+/).map(Number);
     if (viewBoxValues.length === 4) {
-      originalWidth = viewBoxValues[2];
-      originalHeight = viewBoxValues[3];
+      // Only update if dimensions are valid and positive to avoid division by zero later
+      if (viewBoxValues[2] > 0) originalWidth = viewBoxValues[2];
+      if (viewBoxValues[3] > 0) originalHeight = viewBoxValues[3];
     }
   }
 
   // Calculate scale factor from original to new viewBox
-  const scaleFactor = DEFAULT_VIEWBOX_SIZE / Math.max(originalWidth, originalHeight);
+  // Math.max ensures we don't divide by zero even if one dimension is missing/invalid
+  const scaleFactor = DEFAULT_VIEWBOX_SIZE / Math.max(originalWidth, originalHeight || 1);
 
   // Set square viewBox
   svgElement.setAttribute('viewBox', `0 0 ${DEFAULT_VIEWBOX_SIZE} ${DEFAULT_VIEWBOX_SIZE}`);

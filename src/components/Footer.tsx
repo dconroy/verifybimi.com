@@ -3,55 +3,57 @@ export function Footer() {
     <footer className="app-footer">
       <div className="footer-content">
         <div className="footer-section">
-          <h3>What is BIMI?</h3>
+          <h3>About VerifyBIMI</h3>
           <p>
-            BIMI (Brand Indicators for Message Identification) is an email authentication standard 
-            that allows brands to display their verified logo next to authenticated emails in 
-            supported email clients. BIMI helps recipients identify legitimate emails from trusted 
-            brands, improving email security and brand recognition.
+            BIMI (Brand Indicators for Message Identification) allows brands to display verified logos 
+            in supporting email clients. This tool automates the strict technical requirements for your logo.
+          </p>
+          <p>
+            Upload your logo (PNG, JPG, SVG) to convert it into a fully compliant, standardized SVG 
+            ready for BIMI publication.
+          </p>
+          <p className="footer-note">
+            <strong>Note:</strong> Full BIMI implementation also requires a strict DMARC policy 
+            (p=quarantine or p=reject) and a published DNS TXT record.
           </p>
         </div>
 
         <div className="footer-section">
-          <h3>BIMI Standards & Requirements</h3>
-          <p>
-            To use BIMI, logos must meet specific technical requirements:
-          </p>
+          <h3>Technical Requirements</h3>
           <ul>
-            <li><strong>SVG Format:</strong> Logos must be in SVG (Scalable Vector Graphics) format</li>
-            <li><strong>Square ViewBox:</strong> Minimum 64x64 logical units, square aspect ratio</li>
-            <li><strong>Vector Only:</strong> No raster images or embedded bitmap graphics</li>
-            <li><strong>Solid Background:</strong> Opaque background color (no transparency)</li>
-            <li><strong>Safe Padding:</strong> Logo content must stay within safe padding area (typically 12.5%)</li>
-            <li><strong>No Scripts:</strong> No JavaScript, external CSS, or foreign objects</li>
-            <li><strong>Clean SVG:</strong> Simplified styling, inline attributes preferred</li>
+            <li><strong>SVG Format:</strong> Must be Scalable Vector Graphics</li>
+            <li><strong>Square Aspect:</strong> 1:1 ratio, min 64x64 pixels</li>
+            <li><strong>Vector Data:</strong> No embedded raster (bitmaps)</li>
+            <li><strong>Solid Background:</strong> No transparency allowed</li>
+            <li><strong>Safe Zone:</strong> Artwork centered with padding</li>
+            <li><strong>Clean Code:</strong> No scripts, external CSS, or objects</li>
+            <li><strong>Metadata:</strong> Title element required for a11y</li>
           </ul>
         </div>
 
         <div className="footer-section">
-          <h3>BIMI Implementation</h3>
-          <p>
-            BIMI requires both technical logo preparation and email authentication setup:
-          </p>
+          <h3>Implementation Guide</h3>
           <ul>
-            <li><strong>DMARC Policy:</strong> Domain must have a valid DMARC policy (p=quarantine or p=reject)</li>
-            <li><strong>VMC (Verified Mark Certificate):</strong> Optional but recommended for enhanced trust</li>
-            <li><strong>DNS Records:</strong> BIMI DNS record must be published for the domain</li>
-            <li><strong>Email Client Support:</strong> Recipient's email client must support BIMI</li>
+            <li><strong>1. Authentication:</strong> Setup SPF & DKIM records</li>
+            <li><strong>2. DMARC Policy:</strong> Enforce p=quarantine or p=reject</li>
+            <li><strong>3. Logo Prep:</strong> Use VerifyBIMI to create your SVG</li>
+            <li><strong>4. Host Logo:</strong> Host SVG on HTTPS (publicly accessible)</li>
+            <li><strong>5. VMC:</strong> Optional Verified Mark Certificate</li>
+            <li><strong>6. Publish DNS:</strong> Add default._bimi TXT record</li>
           </ul>
         </div>
 
         <div className="footer-section">
-          <h3>Resources & Links</h3>
+          <h3>Official Resources</h3>
           <ul className="footer-links">
             <li>
               <a href="https://bimigroup.org/" target="_blank" rel="noopener noreferrer">
-                BIMI Group - Official Specification
+                BIMI Group - Official Site
               </a>
             </li>
             <li>
               <a href="https://bimigroup.org/bimi-specification/" target="_blank" rel="noopener noreferrer">
-                BIMI Specification Documentation
+                BIMI Specification Docs
               </a>
             </li>
             <li>
@@ -66,29 +68,15 @@ export function Footer() {
             </li>
             <li>
               <a href="https://dmarc.org/" target="_blank" rel="noopener noreferrer">
-                DMARC - Email Authentication
+                DMARC.org Resources
               </a>
             </li>
             <li>
-              <a href="https://www.iana.org/assignments/bimi/bimi.xhtml" target="_blank" rel="noopener noreferrer">
-                IANA BIMI Registry
+              <a href="https://mxtoolbox.com/bimi.aspx" target="_blank" rel="noopener noreferrer">
+                MXToolbox BIMI Checker
               </a>
             </li>
           </ul>
-        </div>
-
-        <div className="footer-section">
-          <h3>About This Tool</h3>
-          <p>
-            This BIMI logo converter helps you prepare logos for BIMI compliance. Upload your logo 
-            (PNG, JPG, or SVG), and we'll convert it to a BIMI-compliant SVG with proper formatting, 
-            background, and padding. The tool validates your logo against BIMI requirements and 
-            provides detailed feedback on compliance.
-          </p>
-          <p className="footer-note">
-            <strong>Note:</strong> This tool prepares logos for BIMI. You still need to set up DMARC, 
-            publish BIMI DNS records, and optionally obtain a VMC for full BIMI implementation.
-          </p>
         </div>
       </div>
 
@@ -111,13 +99,12 @@ export function Footer() {
           </a>
         </div>
         <p>
-          VerifyBIMI - Convert and validate logos for Brand Indicators for Message Identification (BIMI) compliance
+          VerifyBIMI - Free browser-based BIMI logo converter and validator
         </p>
         <p className="footer-copyright">
-          © {new Date().getFullYear()} VerifyBIMI. Open source tool for BIMI logo preparation.
+          © {new Date().getFullYear()} VerifyBIMI. Open source.
         </p>
       </div>
     </footer>
   );
 }
-
