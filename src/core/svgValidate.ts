@@ -140,17 +140,23 @@ export function validateBimiSvg(svg: string): ValidationResult {
       }
     }
 
+    // Always add both background checks for consistency
     if (!hasBackground) {
       result.valid = false;
       result.errors.push('No solid background shape found covering the entire viewBox');
       checks.push({ name: 'Solid background', passed: false, message: 'No background shape found' });
-    } else if (backgroundHasAlpha) {
-      result.valid = false;
-      result.errors.push('Background color has transparency (alpha channel). BIMI requires opaque background');
-      checks.push({ name: 'Opaque background', passed: false, message: 'Background has transparency' });
+      checks.push({ name: 'Opaque background', passed: false, message: 'Cannot check opacity without background' });
     } else {
+      // Background exists, check both solid and opaque
       checks.push({ name: 'Solid background', passed: true });
-      checks.push({ name: 'Opaque background', passed: true });
+      
+      if (backgroundHasAlpha) {
+        result.valid = false;
+        result.errors.push('Background color has transparency (alpha channel). BIMI requires opaque background');
+        checks.push({ name: 'Opaque background', passed: false, message: 'Background has transparency' });
+      } else {
+        checks.push({ name: 'Opaque background', passed: true });
+      }
     }
 
     // Check for title element (recommended/required by some BIMI validators)

@@ -161,16 +161,24 @@ export function normalizeSvg(
     const contentHeight = maxY - minY;
     
     if (contentWidth > 0 && contentHeight > 0) {
-      // Scale content from original viewBox to new viewBox
+      // Calculate scale to fit content into safe area
+      // Content is measured in original viewBox coordinates
+      // We need to scale it to fit in the safe area of the new 100x100 viewBox
+      
+      // First, calculate what the content dimensions would be in the new viewBox
       const scaledContentWidth = contentWidth * scaleFactor;
       const scaledContentHeight = contentHeight * scaleFactor;
       
-      // Then scale to fit safe area
-      const scaleX = safeWidth / scaledContentWidth;
-      const scaleY = safeHeight / scaledContentHeight;
-      scale = Math.min(scaleX, scaleY) * scaleFactor; // Combined scale
+      // Then calculate additional scale needed to fit into safe area
+      const fitScaleX = safeWidth / scaledContentWidth;
+      const fitScaleY = safeHeight / scaledContentHeight;
+      const fitScale = Math.min(fitScaleX, fitScaleY);
+      
+      // Final scale: scaleFactor (original->new viewBox) * fitScale (fit to safe area)
+      scale = scaleFactor * fitScale;
       
       // Center in safe area (accounting for original coordinates)
+      // Calculate dimensions in the final coordinate system (100x100 viewBox)
       const scaledWidth = contentWidth * scale;
       const scaledHeight = contentHeight * scale;
       const scaledMinX = minX * scale;
