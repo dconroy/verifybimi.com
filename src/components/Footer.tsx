@@ -9,8 +9,11 @@ export function Footer() {
             in supporting email clients. This tool automates the strict technical requirements for your logo.
           </p>
           <p>
-            Upload your logo (PNG, JPG, SVG) to convert it into a fully compliant, standardized SVG 
-            ready for BIMI publication.
+            Already have an SVG logo from your designer? This tool will turn it into a BIMI-ready SVG and validate it.
+          </p>
+          <p>
+            Have a PNG or JPG logo? We can try automatic vectorization in the browser, but results may vary 
+            and you should not rely on it for high stakes branding without designer review.
           </p>
           <p className="footer-note">
             <strong>Note:</strong> Full BIMI implementation also requires a strict DMARC policy 

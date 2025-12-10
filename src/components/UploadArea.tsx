@@ -90,8 +90,6 @@ export function UploadArea({ onFileSelect, acceptedFormats, maxSizeMB = 10 }: Up
     fileInputRef.current?.click();
   };
 
-  const formatList = acceptedFormats.map(f => f.replace('image/', '')).join(', ').toUpperCase();
-
   return (
     <div className="upload-area">
       <div
@@ -127,7 +125,10 @@ export function UploadArea({ onFileSelect, acceptedFormats, maxSizeMB = 10 }: Up
             <strong>Drag and drop</strong> your logo here, or <strong>click to browse</strong>
           </p>
           <p className="upload-hint">
-            Accepted formats: {formatList} (max {maxSizeMB}MB)
+            Upload your logo (SVG recommended, PNG/JPG experimental)
+          </p>
+          <p className="upload-hint" style={{ fontSize: '0.875rem', marginTop: '0.5rem', color: '#64748b' }}>
+            If you can, start with an SVG exported from your design tool.
           </p>
         </div>
       </div>

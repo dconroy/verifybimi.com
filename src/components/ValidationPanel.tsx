@@ -2,9 +2,10 @@ import type { ValidationResult } from '../core/types';
 
 interface ValidationPanelProps {
   validation: ValidationResult | null;
+  isSvgSource?: boolean | null;
 }
 
-export function ValidationPanel({ validation }: ValidationPanelProps) {
+export function ValidationPanel({ validation, isSvgSource }: ValidationPanelProps) {
   if (!validation) {
     return (
       <div className="validation-panel">
@@ -24,7 +25,11 @@ export function ValidationPanel({ validation }: ValidationPanelProps) {
       <div className={`validation-status ${statusClass}`}>
         <span className="status-icon">{statusIcon}</span>
         <span className="status-text">
-          {validation.valid ? 'Valid for BIMI' : 'Not valid for BIMI'}
+          {validation.valid 
+            ? (isSvgSource === false 
+                ? 'Valid BIMI SVG structure. This file was auto-generated from a raster logo, so visual accuracy should still be reviewed by a designer.'
+                : 'Valid BIMI SVG. This file meets core BIMI structural requirements.')
+            : 'Not valid for BIMI'}
         </span>
       </div>
 
@@ -56,6 +61,11 @@ export function ValidationPanel({ validation }: ValidationPanelProps) {
       {validation.checks && validation.checks.length > 0 && (
         <div className="validation-checklist">
           <h4>BIMI Compliance Checklist</h4>
+          {isSvgSource === false && (
+            <p style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '1rem', fontStyle: 'italic' }}>
+              Validation result applies to the generated SVG. Since this started from a raster image, visual accuracy may still require a designer to review.
+            </p>
+          )}
           <ul className="checklist">
             {validation.checks.map((check, index) => (
               <li key={index} className={check.passed ? 'check-passed' : 'check-failed'}>

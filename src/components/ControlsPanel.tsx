@@ -6,9 +6,10 @@ interface ControlsPanelProps {
   onOptionsChange: (options: ConvertOptions) => void;
   onConvert: () => void;
   disabled?: boolean;
+  isSvgSource?: boolean | null;
 }
 
-export function ControlsPanel({ options, onOptionsChange, onConvert, disabled }: ControlsPanelProps) {
+export function ControlsPanel({ options, onOptionsChange, onConvert, disabled, isSvgSource }: ControlsPanelProps) {
   const {
     backgroundColor = '#FFFFFF',
     shape = 'circle',
@@ -35,6 +36,29 @@ export function ControlsPanel({ options, onOptionsChange, onConvert, disabled }:
   return (
     <div className="controls-panel">
       <h3>Conversion Options</h3>
+      
+      {isSvgSource === false && (
+        <div className="raster-warning-banner">
+          <strong>⚠️ Experimental Auto Vectorization</strong>
+          <p>
+            You uploaded a raster logo (PNG/JPG). We will attempt automatic vectorization in the browser. 
+            This works best for simple, flat logos. For production BIMI we recommend getting a true SVG 
+            from your designer and using that instead.
+          </p>
+        </div>
+      )}
+
+      {isSvgSource === true && (
+        <div className="svg-source-badge">
+          <span className="source-badge">Source: SVG (best for BIMI)</span>
+        </div>
+      )}
+
+      {isSvgSource === false && (
+        <div className="raster-source-badge">
+          <span className="source-badge experimental">Source: PNG/JPG. Auto vectorization is experimental.</span>
+        </div>
+      )}
       
       <div className="control-group">
         <label htmlFor="background-color">Background Color</label>

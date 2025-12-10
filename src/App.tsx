@@ -16,6 +16,7 @@ function App() {
   const [validation, setValidation] = useState<ValidationResult | null>(null);
   const [isConverting, setIsConverting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isSvgSource, setIsSvgSource] = useState<boolean | null>(null);
   const [options, setOptions] = useState<ConvertOptions>({
     backgroundColor: '#FFFFFF',
     shape: 'circle',
@@ -35,7 +36,7 @@ function App() {
       // Add warning for raster images
       if (!file.type.includes('svg') && !file.name.toLowerCase().endsWith('.svg')) {
         result.validation.warnings.push(
-          'Raster image detected. Conversion quality is limited. For best results, use a vector SVG source.'
+          'Auto vectorization may not be accurate enough for BIMI. Please consider using an SVG provided by your designer.'
         );
       }
 
@@ -56,6 +57,10 @@ function App() {
     setBimiSvg(null);
     setValidation(null);
 
+    // Determine if source is SVG or raster
+    const isSvg = file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg');
+    setIsSvgSource(isSvg);
+
     // Create preview for original file
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -64,7 +69,7 @@ function App() {
     reader.readAsDataURL(file);
 
     // Extract title from SVG if it's an SVG file (for pre-populating the title field)
-    if (file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg')) {
+    if (isSvg) {
       try {
         const text = await file.text();
         const parser = new DOMParser();
@@ -111,7 +116,7 @@ function App() {
       <header className="app-header">
         <h1>VerifyBIMI</h1>
         <p className="app-description">
-          Upload a logo, convert to a BIMI-friendly SVG, and validate it.
+          Already have an SVG logo from your designer? This tool will turn it into a BIMI-ready SVG and validate it.
         </p>
       </header>
 
@@ -129,6 +134,7 @@ function App() {
               onOptionsChange={setOptions}
               onConvert={handleConvert}
               disabled={!originalFile || isConverting}
+              isSvgSource={isSvgSource}
             />
 
             {error && (
@@ -160,7 +166,7 @@ function App() {
             )}
           </div>
 
-          <ValidationPanel validation={validation} />
+          <ValidationPanel validation={validation} isSvgSource={isSvgSource} />
         </div>
       </main>
 
