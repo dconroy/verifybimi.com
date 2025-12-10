@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 
 interface UploadAreaProps {
-  onFileSelect: (file: File) => void;
+  onFileSelect: (file: File) => void | Promise<void>;
   acceptedFormats: string[];
   maxSizeMB?: number;
 }
@@ -55,7 +55,14 @@ export function UploadArea({ onFileSelect, acceptedFormats, maxSizeMB = 10 }: Up
       return;
     }
 
-    onFileSelect(file);
+    // Handle async onFileSelect properly
+    const result = onFileSelect(file);
+    if (result instanceof Promise) {
+      result.catch((err) => {
+        console.error('Error in file selection handler:', err);
+        setError('An error occurred while processing the file');
+      });
+    }
   };
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -69,7 +76,14 @@ export function UploadArea({ onFileSelect, acceptedFormats, maxSizeMB = 10 }: Up
       return;
     }
 
-    onFileSelect(file);
+    // Handle async onFileSelect properly
+    const result = onFileSelect(file);
+    if (result instanceof Promise) {
+      result.catch((err) => {
+        console.error('Error in file selection handler:', err);
+        setError('An error occurred while processing the file');
+      });
+    }
   };
 
   const handleBrowseClick = () => {

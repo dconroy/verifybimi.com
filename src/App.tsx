@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { UploadArea } from './components/UploadArea';
 import { ControlsPanel } from './components/ControlsPanel';
 import { PreviewPanel } from './components/PreviewPanel';
@@ -7,7 +7,6 @@ import { Footer } from './components/Footer';
 import { convertToBimiSvg } from './core';
 import type { ConvertOptions, ValidationResult } from './core/types';
 import { downloadBimiSvg, downloadValidationReport, copyToClipboard } from './utils/downloadUtils';
-import { initAnalytics, trackFileUpload, trackConversion, trackDownload } from './utils/analytics';
 import './App.css';
 
 function App() {
@@ -21,24 +20,15 @@ function App() {
     backgroundColor: '#FFFFFF',
     shape: 'circle',
     paddingPercent: 12.5,
-    title: '',
   });
 
   const acceptedFormats = ['image/png', 'image/jpeg', 'image/jpg', 'image/svg+xml'];
 
-  // Initialize analytics on mount
-  useEffect(() => {
-    initAnalytics();
-  }, []);
-
-  const handleFileSelect = useCallback(async (file: File) => {
+  const handleFileSelect = useCallback((file: File) => {
     setOriginalFile(file);
     setError(null);
     setBimiSvg(null);
     setValidation(null);
-
-    // Track file upload
-    trackFileUpload(file.type, file.size);
 
     // Create preview for original file
     const reader = new FileReader();
@@ -46,30 +36,6 @@ function App() {
       setOriginalPreview(e.target?.result as string);
     };
     reader.readAsDataURL(file);
-
-    // Extract title from SVG if it's an SVG file
-    if (file.type === 'image/svg+xml' || file.name.toLowerCase().endsWith('.svg')) {
-      try {
-        const svgText = await file.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(svgText, 'image/svg+xml');
-        const titleElement = doc.querySelector('title');
-        
-        if (titleElement && titleElement.textContent) {
-          const existingTitle = titleElement.textContent.trim();
-          if (existingTitle) {
-            // Pre-populate the title field
-            setOptions(prev => ({
-              ...prev,
-              title: existingTitle,
-            }));
-          }
-        }
-      } catch (err) {
-        // Silently fail - not critical if we can't extract the title
-        console.debug('Could not extract title from SVG:', err);
-      }
-    }
   }, []);
 
   const handleConvert = useCallback(async () => {
@@ -82,16 +48,10 @@ function App() {
       const result = await convertToBimiSvg(originalFile, options);
       setBimiSvg(result.svg);
       setValidation(result.validation);
-      
-      // Track successful conversion
-      trackConversion(true, originalFile.type, result.validation.errors.length);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Conversion failed');
       setBimiSvg(null);
       setValidation(null);
-      
-      // Track failed conversion
-      trackConversion(false, originalFile.type);
     } finally {
       setIsConverting(false);
     }
@@ -100,20 +60,17 @@ function App() {
   const handleDownloadSvg = useCallback(() => {
     if (!bimiSvg || !originalFile) return;
     downloadBimiSvg(bimiSvg, originalFile.name);
-    trackDownload('svg');
   }, [bimiSvg, originalFile]);
 
   const handleDownloadReport = useCallback(() => {
     if (!validation || !originalFile) return;
     downloadValidationReport(validation, originalFile.name);
-    trackDownload('report');
   }, [validation, originalFile]);
 
   const handleCopySvg = useCallback(async () => {
     if (!bimiSvg) return;
     try {
       await copyToClipboard(bimiSvg);
-      trackDownload('clipboard');
       // Could show a toast notification here
       alert('SVG copied to clipboard!');
     } catch (err) {
@@ -190,4 +147,3 @@ function App() {
 }
 
 export default App;
-
