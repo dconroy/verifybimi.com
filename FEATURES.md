@@ -150,3 +150,4 @@ This document outlines potential features to enhance VerifyBIMI.
 
 Have an idea? Open an issue or submit a pull request!
 
+

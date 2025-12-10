@@ -124,3 +124,4 @@
 3. **Medium-term**: Add blog section, create FAQ page
 4. **Long-term**: Build backlinks, create content marketing strategy
 
+
