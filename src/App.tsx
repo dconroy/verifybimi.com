@@ -12,6 +12,8 @@ import { BimiInfoPage } from './components/BimiInfoPage';
 // Lazy load tools pages to reduce initial bundle size
 const ToolsPage = lazy(() => import('./components/tools/ToolsPage').then(m => ({ default: m.ToolsPage })));
 const DmarcVerifierPage = lazy(() => import('./components/tools/DmarcVerifierPage').then(m => ({ default: m.DmarcVerifierPage })));
+const BimiCheckerPage = lazy(() => import('./components/tools/BimiCheckerPage').then(m => ({ default: m.BimiCheckerPage })));
+const SpfDkimCheckerPage = lazy(() => import('./components/tools/SpfDkimCheckerPage').then(m => ({ default: m.SpfDkimCheckerPage })));
 import { convertToBimiSvg } from './core';
 import type { ConvertOptions, ValidationResult } from './core/types';
 import { downloadBimiSvg, copyToClipboard } from './utils/downloadUtils';
@@ -67,6 +69,22 @@ function App() {
       );
     }
 
+    if (pathname.includes('/tools/bimi')) {
+      return (
+        <Suspense fallback={<div className="app"><main className="app-main"><div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div></main></div>}>
+          <BimiCheckerPage />
+        </Suspense>
+      );
+    }
+
+    if (pathname.includes('/tools/spf-dkim')) {
+      return (
+        <Suspense fallback={<div className="app"><main className="app-main"><div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div></main></div>}>
+          <SpfDkimCheckerPage />
+        </Suspense>
+      );
+    }
+
     if (pathname.includes('/tools')) {
       return (
         <Suspense fallback={<div className="app"><main className="app-main"><div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div></main></div>}>
@@ -84,6 +102,8 @@ function App() {
   const blogHref = `${import.meta.env.BASE_URL}blog/`;
   const toolsHref = `${import.meta.env.BASE_URL}tools/`;
   const dmarcHref = `${import.meta.env.BASE_URL}tools/dmarc/`;
+  const bimiHref = `${import.meta.env.BASE_URL}tools/bimi/`;
+  const spfDkimHref = `${import.meta.env.BASE_URL}tools/spf-dkim/`;
 
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [originalPreview, setOriginalPreview] = useState<string | null>(null);
@@ -219,6 +239,12 @@ function App() {
               </a>
               <a className="header-tools-item" href={dmarcHref} role="menuitem">
                 DMARC verifier
+              </a>
+              <a className="header-tools-item" href={bimiHref} role="menuitem">
+                BIMI checker
+              </a>
+              <a className="header-tools-item" href={spfDkimHref} role="menuitem">
+                SPF/DKIM checker
               </a>
             </div>
           </details>

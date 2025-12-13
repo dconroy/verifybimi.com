@@ -10,6 +10,8 @@ export function ToolsPage() {
   const baseUrl = import.meta.env.BASE_URL || '/';
   const homeHref = baseUrl;
   const dmarcHref = `${baseUrl}tools/dmarc/`;
+  const bimiHref = `${baseUrl}tools/bimi/`;
+  const spfDkimHref = `${baseUrl}tools/spf-dkim/`;
 
   if (!isOnToolsPath(pathname)) {
     return (
@@ -72,13 +74,21 @@ export function ToolsPage() {
             <a className="tool-tile" href={dmarcHref}>
               <div className="tool-tile-title">DMARC verifier</div>
               <div className="tool-tile-desc">
-                Check if your domain publishes a DMARC record and whether it’s enforced (required for BIMI).
+                Check if your domain publishes a DMARC record and whether it's enforced (required for BIMI).
               </div>
             </a>
-            <div className="tool-tile tool-tile-disabled" aria-disabled="true">
-              <div className="tool-tile-title">More tools coming soon</div>
-              <div className="tool-tile-desc">BIMI DNS record checker, SPF/DKIM helpers, and more.</div>
-            </div>
+            <a className="tool-tile" href={bimiHref}>
+              <div className="tool-tile-title">BIMI DNS record checker</div>
+              <div className="tool-tile-desc">
+                Verify your BIMI DNS record is properly configured and points to a valid logo URL.
+              </div>
+            </a>
+            <a className="tool-tile" href={spfDkimHref}>
+              <div className="tool-tile-title">SPF/DKIM checker</div>
+              <div className="tool-tile-desc">
+                Check your SPF and DKIM records. Both are required prerequisites for BIMI eligibility.
+              </div>
+            </a>
           </div>
         </div>
       </main>
