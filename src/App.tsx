@@ -17,6 +17,18 @@ import './App.css';
 function App() {
   // Simple path-based view switch (no router). This also acts as a safety net if hosting falls back to index.html.
   if (typeof window !== 'undefined') {
+    // GitHub Pages fallback: static pages under /tools/* redirect to "/?r=/tools/...".
+    // Normalize that back into a clean pathname so our simple router can render the correct view.
+    const baseUrl = import.meta.env.BASE_URL || '/';
+    const params = new URLSearchParams(window.location.search);
+    const redirect = params.get('r');
+    if (redirect) {
+      const next = redirect.startsWith('/') ? redirect : `/${redirect}`;
+      // Ensure we keep baseUrl prefix (e.g., /repo/ on GH Pages project sites)
+      const normalized = `${baseUrl.replace(/\/?$/, '/')}${next.replace(/^\//, '')}`;
+      window.history.replaceState({}, '', normalized);
+    }
+
     const pathname = window.location.pathname;
 
     // If hosting falls back to index.html for unknown routes, redirect to the real static blog pages.
