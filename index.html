@@ -77,9 +77,10 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- Main app script: module scripts are automatically deferred -->
     <script type="module" src="/src/main.tsx"></script>
     
-    <!-- Google Analytics: Deferred to reduce blocking -->
+    <!-- Google Analytics: Deferred to reduce blocking (non-critical) -->
     <script>
       // Defer GA loading until after page is interactive
       if (document.readyState === 'loading') {
