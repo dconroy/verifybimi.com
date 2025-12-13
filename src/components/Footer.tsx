@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 
 export function Footer() {
   const baseUrl = import.meta.env.BASE_URL || '/';

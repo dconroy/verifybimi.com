@@ -7,7 +7,6 @@ import { EmailPreview } from './components/EmailPreview';
 import { ValidationPanel } from './components/ValidationPanel';
 import { Footer } from './components/Footer';
 import { lazy, Suspense } from 'react';
-import { BimiInfoPage } from './components/BimiInfoPage';
 
 // Lazy load tools pages to reduce initial bundle size
 const ToolsPage = lazy(() => import('./components/tools/ToolsPage').then(m => ({ default: m.ToolsPage })));
@@ -93,8 +92,10 @@ function App() {
       );
     }
 
+    // Fallback for /what-is-bimi if the SPA loads instead of the static file
     if (pathname.includes('/what-is-bimi')) {
-      return <BimiInfoPage />;
+      window.location.replace(`${baseUrl}what-is-bimi/index.html`);
+      return null;
     }
   }
 
