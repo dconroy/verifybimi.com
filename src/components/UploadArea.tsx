@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { trackFileRejected, trackFileUpload } from '../utils/analytics';
 
 interface UploadAreaProps {
   onFileSelect: (file: File) => void | Promise<void>;
@@ -23,21 +24,21 @@ export function UploadArea({ onFileSelect, acceptedFormats, maxSizeMB = 10 }: Up
     setIsDragging(false);
   };
 
-  const validateFile = (file: File): string | null => {
+  const validateFile = (file: File): { error: string | null; reason?: 'invalid_format' | 'too_large' } => {
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
     const isValidFormat = acceptedFormats.some(format => 
       file.type.includes(format) || fileExtension === format.replace('image/', '')
     );
 
     if (!isValidFormat) {
-      return `Unsupported file type. Accepted: ${acceptedFormats.join(', ')}`;
+      return { error: `Unsupported file type. Accepted: ${acceptedFormats.join(', ')}`, reason: 'invalid_format' };
     }
 
     if (file.size > maxSizeMB * 1024 * 1024) {
-      return `File size exceeds ${maxSizeMB}MB limit`;
+      return { error: `File size exceeds ${maxSizeMB}MB limit`, reason: 'too_large' };
     }
 
-    return null;
+    return { error: null };
   };
 
   const handleDrop = (e: React.DragEvent) => {
@@ -49,11 +50,14 @@ export function UploadArea({ onFileSelect, acceptedFormats, maxSizeMB = 10 }: Up
     const file = e.dataTransfer.files[0];
     if (!file) return;
 
-    const validationError = validateFile(file);
+    const { error: validationError, reason } = validateFile(file);
     if (validationError) {
       setError(validationError);
+      trackFileRejected('drag_drop', reason || 'unknown');
       return;
     }
+
+    trackFileUpload(file.type || file.name.split('.').pop()?.toLowerCase() || 'unknown', file.size, 'drag_drop');
 
     // Handle async onFileSelect properly
     const result = onFileSelect(file);
@@ -70,11 +74,14 @@ export function UploadArea({ onFileSelect, acceptedFormats, maxSizeMB = 10 }: Up
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const validationError = validateFile(file);
+    const { error: validationError, reason } = validateFile(file);
     if (validationError) {
       setError(validationError);
+      trackFileRejected('file_picker', reason || 'unknown');
       return;
     }
+
+    trackFileUpload(file.type || file.name.split('.').pop()?.toLowerCase() || 'unknown', file.size, 'file_picker');
 
     // Handle async onFileSelect properly
     const result = onFileSelect(file);

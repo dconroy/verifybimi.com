@@ -70,10 +70,25 @@ export function trackEvent(
 /**
  * Track file upload
  */
-export function trackFileUpload(fileType: string, fileSize: number): void {
+export function trackFileUpload(
+  fileType: string,
+  fileSize: number,
+  uploadMethod?: 'drag_drop' | 'file_picker'
+): void {
   trackEvent('file_upload', {
     file_type: fileType,
     file_size: fileSize,
+    ...(uploadMethod ? { upload_method: uploadMethod } : {}),
+  });
+}
+
+export function trackFileRejected(
+  uploadMethod: 'drag_drop' | 'file_picker',
+  reason: 'invalid_format' | 'too_large' | 'unknown'
+): void {
+  trackEvent('file_upload_rejected', {
+    upload_method: uploadMethod,
+    reason,
   });
 }
 
