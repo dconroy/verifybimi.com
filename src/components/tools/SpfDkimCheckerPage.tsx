@@ -19,6 +19,7 @@ export function SpfDkimCheckerPage() {
   const [dkimSelector, setDkimSelector] = useState('');
   const [resolverId, setResolverId] = useState(() => getDefaultResolver().id);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   // SPF state
@@ -76,6 +77,7 @@ export function SpfDkimCheckerPage() {
 
   const handleVerify = async () => {
     setIsLoading(true);
+    setHasSearched(false);
     setError(null);
     setSpfAnswers(null);
     setSpfRecord(null);
@@ -130,6 +132,7 @@ export function SpfDkimCheckerPage() {
       }
     } finally {
       setIsLoading(false);
+      setHasSearched(true);
     }
   };
 
@@ -394,7 +397,7 @@ export function SpfDkimCheckerPage() {
               </div>
             )}
 
-            {dkimRecords.length === 0 && !isLoading && domain && (
+            {dkimRecords.length === 0 && !isLoading && hasSearched && (
               <div className="dmarc-results" style={{ marginTop: '2rem' }}>
                 <div className="dmarc-results-header">
                   <h3 className="dmarc-results-title">DKIM Record</h3>
