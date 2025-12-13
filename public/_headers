@@ -1,0 +1,39 @@
+# Cache headers for GitHub Pages
+# Note: GitHub Pages doesn't support _headers by default, but this file documents
+# the recommended cache strategy. For actual deployment, configure via:
+# - Cloudflare Pages: Uses _headers automatically
+# - Netlify: Uses _headers automatically
+# - GitHub Pages: Requires a proxy/CDN or manual configuration
+
+# Static assets: long cache
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Images: long cache
+/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML: short cache (for updates)
+/*.html
+  Cache-Control: public, max-age=3600, must-revalidate
+
+# JSON/XML: medium cache
+/*.json
+  Cache-Control: public, max-age=86400
+
+/*.xml
+  Cache-Control: public, max-age=86400
+
+# Root index: no cache (SPA)
+/
+  Cache-Control: public, max-age=0, must-revalidate
+

@@ -38,6 +38,10 @@
     <meta name="theme-color" content="#667eea" />
     <link rel="canonical" href="https://verifybimi.com/" />
     
+    <!-- Performance: Preconnect to third-party origins -->
+    <link rel="preconnect" href="https://www.googletagmanager.com" crossorigin />
+    <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+    
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
@@ -70,20 +74,36 @@
     }
     </script>
     
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-5NC3F2GFGJ"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-5NC3F2GFGJ', {
-        page_path: window.location.pathname,
-      });
-    </script>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Google Analytics: Deferred to reduce blocking -->
+    <script>
+      // Defer GA loading until after page is interactive
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadGA);
+      } else {
+        // Already loaded, but still defer slightly
+        setTimeout(loadGA, 100);
+      }
+      
+      function loadGA() {
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-5NC3F2GFGJ';
+        document.head.appendChild(script);
+        
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-5NC3F2GFGJ', {
+          page_path: window.location.pathname,
+        });
+      }
+    </script>
   </body>
 </html>
 

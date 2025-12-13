@@ -10,5 +10,17 @@ export default defineConfig({
   base: process.env.GITHUB_PAGES && !process.env.CUSTOM_DOMAIN
     ? `/${process.env.GITHUB_REPOSITORY_NAME || 'bimify'}/`
     : '/',
+  build: {
+    rollupOptions: {
+      output: {
+        // Code splitting: separate vendor chunks
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+        },
+      },
+    },
+    // Chunk size warnings threshold (500kb default)
+    chunkSizeWarningLimit: 600,
+  },
 })
 

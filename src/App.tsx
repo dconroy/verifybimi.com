@@ -6,9 +6,12 @@ import { PreviewPanel } from './components/PreviewPanel';
 import { EmailPreview } from './components/EmailPreview';
 import { ValidationPanel } from './components/ValidationPanel';
 import { Footer } from './components/Footer';
+import { lazy, Suspense } from 'react';
 import { BimiInfoPage } from './components/BimiInfoPage';
-import { ToolsPage } from './components/tools/ToolsPage';
-import { DmarcVerifierPage } from './components/tools/DmarcVerifierPage';
+
+// Lazy load tools pages to reduce initial bundle size
+const ToolsPage = lazy(() => import('./components/tools/ToolsPage').then(m => ({ default: m.ToolsPage })));
+const DmarcVerifierPage = lazy(() => import('./components/tools/DmarcVerifierPage').then(m => ({ default: m.DmarcVerifierPage })));
 import { convertToBimiSvg } from './core';
 import type { ConvertOptions, ValidationResult } from './core/types';
 import { downloadBimiSvg, copyToClipboard } from './utils/downloadUtils';
@@ -57,11 +60,19 @@ function App() {
     }
 
     if (pathname.includes('/tools/dmarc')) {
-      return <DmarcVerifierPage />;
+      return (
+        <Suspense fallback={<div className="app"><main className="app-main"><div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div></main></div>}>
+          <DmarcVerifierPage />
+        </Suspense>
+      );
     }
 
     if (pathname.includes('/tools')) {
-      return <ToolsPage />;
+      return (
+        <Suspense fallback={<div className="app"><main className="app-main"><div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div></main></div>}>
+          <ToolsPage />
+        </Suspense>
+      );
     }
 
     if (pathname.includes('/what-is-bimi')) {
