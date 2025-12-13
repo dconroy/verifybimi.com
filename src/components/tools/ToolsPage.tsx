@@ -1,4 +1,5 @@
 import { Footer } from '../Footer';
+import { Header } from '../Header';
 import '../../App.css';
 
 function isOnToolsPath(pathname: string): boolean {
@@ -16,15 +17,7 @@ export function ToolsPage() {
   if (!isOnToolsPath(pathname)) {
     return (
       <div className="app">
-        <header className="app-header">
-          <h1>VerifyBIMI</h1>
-          <p className="app-description">Tools</p>
-          <div className="app-header-actions">
-            <a className="header-cta" href={homeHref}>
-              Back to the converter
-            </a>
-          </div>
-        </header>
+        <Header />
         <main className="app-main">
           <div className="upload-area">
             <h2 style={{ marginTop: 0 }}>Tools</h2>
@@ -44,22 +37,16 @@ export function ToolsPage() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <h1>Tools</h1>
-        <p className="app-description">
-          Helpful utilities for getting BIMI-ready: authentication checks, DNS helpers, and validation.
-        </p>
-        <div className="app-header-actions">
-          <a className="header-cta" href={homeHref}>
-            Back to the converter
-          </a>
-          <a className="header-cta" href={dmarcHref}>
-            DMARC verifier
-          </a>
-        </div>
-      </header>
+      <Header />
 
       <main className="app-main">
+        <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '1rem' }}>
+          <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.025em' }}>Tools</h1>
+          <p style={{ display: 'block', margin: '0 auto', fontSize: '1.25rem', maxWidth: '600px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
+            Helpful utilities for getting BIMI-ready: authentication checks, DNS helpers, and validation.
+          </p>
+        </div>
+
         <div className="tools-page">
           <div className="tools-card">
             <div className="tools-kicker">Tools</div>

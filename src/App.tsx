@@ -1,12 +1,12 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, lazy, Suspense } from 'react';
+import { Footer } from './components/Footer';
+import { Header } from './components/Header';
 import { UploadArea } from './components/UploadArea';
 import { ControlsPanel } from './components/ControlsPanel';
 import { OriginalPreview } from './components/OriginalPreview';
 import { PreviewPanel } from './components/PreviewPanel';
 import { EmailPreview } from './components/EmailPreview';
 import { ValidationPanel } from './components/ValidationPanel';
-import { Footer } from './components/Footer';
-import { lazy, Suspense } from 'react';
 
 // Lazy load tools pages to reduce initial bundle size
 const ToolsPage = lazy(() => import('./components/tools/ToolsPage').then(m => ({ default: m.ToolsPage })));
@@ -21,6 +21,7 @@ import './App.css';
 function App() {
   // Simple path-based view switch (no router). This also acts as a safety net if hosting falls back to index.html.
   if (typeof window !== 'undefined') {
+    // ... (keep existing routing logic) ...
     // GitHub Pages fallback: static pages under /tools/* redirect to "/?r=/tools/...".
     // Normalize that back into a clean pathname so our simple router can render the correct view.
     const baseUrl = import.meta.env.BASE_URL || '/';
@@ -98,12 +99,6 @@ function App() {
       return null;
     }
   }
-
-  const guideHref = `${import.meta.env.BASE_URL}what-is-bimi/`;
-  const toolsHref = `${import.meta.env.BASE_URL}tools/`;
-  const dmarcHref = `${import.meta.env.BASE_URL}tools/dmarc/`;
-  const bimiHref = `${import.meta.env.BASE_URL}tools/bimi/`;
-  const spfDkimHref = `${import.meta.env.BASE_URL}tools/spf-dkim/`;
 
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [originalPreview, setOriginalPreview] = useState<string | null>(null);
@@ -208,47 +203,17 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <div className="app-header-brand">
-          <img
-            src="/logo.png"
-            alt="VerifyBIMI"
-            className="app-logo"
-            width="56"
-            height="56"
-            decoding="async"
-            fetchPriority="high"
-          />
-          <h1>VerifyBIMI</h1>
-        </div>
-        <p className="app-description">
-          Already have an SVG logo from your designer? This tool will turn it into a BIMI-ready SVG and validate it.
-        </p>
-        <div className="app-header-actions">
-          <a className="header-cta" href={guideHref}>
-            What is BIMI? Read the guide
-          </a>
-          <details className="header-tools">
-            <summary className="header-cta">BIMI Tools</summary>
-            <div className="header-tools-menu" role="menu" aria-label="Tools menu">
-              <a className="header-tools-item" href={toolsHref} role="menuitem">
-                Tools home
-              </a>
-              <a className="header-tools-item" href={dmarcHref} role="menuitem">
-                DMARC verifier
-              </a>
-              <a className="header-tools-item" href={bimiHref} role="menuitem">
-                BIMI checker
-              </a>
-              <a className="header-tools-item" href={spfDkimHref} role="menuitem">
-                SPF/DKIM checker
-              </a>
-            </div>
-          </details>
-        </div>
-      </header>
-
+      <Header />
+      
       <main className="app-main">
+        {/* Hero Section for Main Converter */}
+        <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '1rem' }}>
+          <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.025em' }}>BIMI Converter</h1>
+          <p style={{ display: 'block', margin: '0 auto', fontSize: '1.25rem', maxWidth: '600px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
+            Already have an SVG logo from your designer? This tool will turn it into a BIMI-ready SVG and validate it.
+          </p>
+        </div>
+
         <div className="app-content">
           <div className="left-column">
             <UploadArea

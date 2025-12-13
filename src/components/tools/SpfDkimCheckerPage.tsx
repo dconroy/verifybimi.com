@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Footer } from '../Footer';
+import { Header } from '../Header';
 import '../../App.css';
 import { DOH_RESOLVERS, getDefaultResolver, dohLookupTxt } from '../../utils/doh';
 import { spfQname, parseSpfRecord, pickLikelySpfRecord } from '../../utils/spf';
@@ -13,7 +14,6 @@ function isOnSpfDkimToolPath(pathname: string): boolean {
 export function SpfDkimCheckerPage() {
   const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
   const baseUrl = import.meta.env.BASE_URL || '/';
-  const homeHref = baseUrl;
   const toolsHref = `${baseUrl}tools/`;
 
   const [domain, setDomain] = useState('');
@@ -35,18 +35,7 @@ export function SpfDkimCheckerPage() {
   if (!isOnSpfDkimToolPath(pathname)) {
     return (
       <div className="app">
-        <header className="app-header">
-          <h1>VerifyBIMI</h1>
-          <p className="app-description">SPF/DKIM checker</p>
-          <div className="app-header-actions">
-            <a className="header-cta" href={homeHref}>
-              Back to the converter
-            </a>
-            <a className="header-cta" href={toolsHref}>
-              Tools
-            </a>
-          </div>
-        </header>
+        <Header />
         <main className="app-main">
           <div className="upload-area">
             <h2 style={{ marginTop: 0 }}>SPF/DKIM checker</h2>
@@ -145,22 +134,16 @@ export function SpfDkimCheckerPage() {
 
   return (
     <div className="app">
-      <header className="app-header">
-        <h1>SPF/DKIM checker</h1>
-        <p className="app-description">
-          Verify your SPF and DKIM DNS records using DNS-over-HTTPS. Both are required prerequisites for BIMI.
-        </p>
-        <div className="app-header-actions">
-          <a className="header-cta" href={homeHref}>
-            Back to the converter
-          </a>
-          <a className="header-cta" href={toolsHref}>
-            Tools
-          </a>
-        </div>
-      </header>
+      <Header />
 
       <main className="app-main">
+        <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '1rem' }}>
+          <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.025em' }}>SPF/DKIM checker</h1>
+          <p style={{ display: 'block', margin: '0 auto', fontSize: '1.25rem', maxWidth: '600px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
+            Verify your SPF and DKIM DNS records using DNS-over-HTTPS. Both are required prerequisites for BIMI.
+          </p>
+        </div>
+
         <div className="dmarc-page">
           <div className="dmarc-card">
             <div className="dmarc-kicker">SPF & DKIM</div>
@@ -433,4 +416,3 @@ export function SpfDkimCheckerPage() {
     </div>
   );
 }
-
