@@ -9,6 +9,7 @@ BIMI (Brand Indicators for Message Identification) is an email standard that all
 
 ## Features
 
+### Logo Conversion & Validation
 - **Multi-format Support**: Upload PNG, JPG, or SVG logos
 - **BIMI Conversion**: Automatically converts logos to BIMI-compliant SVG format
 - **Live Preview**: Side-by-side comparison of original and BIMI versions
@@ -16,11 +17,33 @@ BIMI (Brand Indicators for Message Identification) is an email standard that all
 - **Customizable Options**:
   - Background color (default: white)
   - Background shape (circle or rounded square)
-  - Safe padding percentage (5% to 25%, default: 12.5%)
+  - Safe padding percentage (1% to 25%, default: 3%)
 - **Download Options**:
   - Download BIMI SVG file
   - Copy SVG to clipboard
-  - Download validation report (JSON)
+
+### Tools & Utilities
+- **DMARC Verifier**: Check your DMARC DNS record using DNS-over-HTTPS
+  - Verify DMARC policy enforcement (required for BIMI)
+  - Multiple resolver options (Cloudflare, Google DNS)
+  - Clear PASS/FAIL status for BIMI eligibility
+  - Parsed DMARC tag analysis
+
+### Educational Resources
+- **BIMI Guide**: Comprehensive "What is BIMI?" guide
+- **Blog**: Practical guides covering:
+  - BIMI logo requirements (SVG Tiny 1.2)
+  - BIMI DNS record examples
+  - DMARC vs BIMI relationship
+  - Provider-specific requirements (Gmail, Yahoo)
+  - VMC requirements
+  - Deliverability considerations
+
+### Performance & Accessibility
+- **Optimized Performance**: Code splitting, lazy loading, and optimized asset delivery
+- **Accessibility**: WCAG-compliant with proper heading hierarchy, form labels, and ARIA attributes
+- **SEO Optimized**: Comprehensive meta tags, structured data, and sitemap
+- **Fast Loading**: Preconnect hints, deferred analytics, and efficient caching strategies
 
 ## BIMI Requirements Implemented
 
@@ -106,7 +129,14 @@ The application is built with a modular architecture that separates core logic f
   - Can be reused by backend services, CLI tools, or other applications
   - No React dependencies
 - **`src/components/`**: React UI components
-- **`src/utils/`**: Utility functions for downloads and clipboard operations
+  - Main converter components
+  - Tools pages (DMARC verifier, tools landing)
+  - Educational pages (BIMI guide)
+- **`src/utils/`**: Utility functions
+  - Downloads and clipboard operations
+  - DNS-over-HTTPS (DoH) for DMARC verification
+  - DMARC record parsing and validation
+  - Analytics tracking
 
 ### Future Micro-SaaS Integration
 
@@ -145,10 +175,12 @@ The raster-to-vector conversion (PNG/JPG to SVG) is performed entirely in the br
 
 ## Technology Stack
 
-- **React 18**: UI framework
+- **React 18**: UI framework with lazy loading and code splitting
 - **TypeScript**: Type safety
-- **Vite**: Build tool and dev server
+- **Vite**: Build tool and dev server with optimized production builds
 - **Browser APIs**: File API, Canvas API, DOMParser, XMLSerializer
+- **DNS-over-HTTPS**: For DMARC verification (Cloudflare, Google DNS)
+- **Google Analytics**: Usage tracking (deferred loading for performance)
 
 ## Project Structure
 
@@ -165,21 +197,68 @@ bimify/
 │   │   ├── UploadArea.tsx
 │   │   ├── ControlsPanel.tsx
 │   │   ├── PreviewPanel.tsx
-│   │   └── ValidationPanel.tsx
+│   │   ├── ValidationPanel.tsx
+│   │   ├── EmailPreview.tsx
+│   │   ├── OriginalPreview.tsx
+│   │   ├── BimiInfoPage.tsx
+│   │   ├── Footer.tsx
+│   │   └── tools/         # Tools pages
+│   │       ├── ToolsPage.tsx
+│   │       └── DmarcVerifierPage.tsx
 │   ├── utils/             # Utility functions
-│   │   └── downloadUtils.ts
+│   │   ├── downloadUtils.ts
+│   │   ├── analytics.ts
+│   │   ├── doh.ts         # DNS-over-HTTPS
+│   │   └── dmarc.ts       # DMARC parsing
 │   ├── App.tsx            # Main app component
 │   ├── main.tsx           # Entry point
+│   ├── App.css            # Component styles
 │   └── index.css          # Global styles
+├── public/                # Static assets
+│   ├── blog/              # Blog posts (static HTML)
+│   ├── what-is-bimi/      # BIMI guide (static HTML)
+│   ├── tools/             # Tool redirect stubs for GitHub Pages
+│   ├── favicon.ico
+│   ├── logo.png
+│   ├── sitemap.xml
+│   ├── robots.txt
+│   └── _headers           # Cache headers (for Cloudflare/Netlify)
 ├── index.html
 ├── package.json
 ├── tsconfig.json
 └── vite.config.ts
 ```
 
+## Performance Optimizations
+
+- **Code Splitting**: Tools pages are lazy-loaded to reduce initial bundle size
+- **Vendor Chunks**: React is separated into its own chunk for better caching
+- **Deferred Analytics**: Google Analytics loads after page interaction
+- **Preconnect Hints**: Early connection to third-party domains
+- **Cache Headers**: Optimized cache strategies for static assets (see `CACHE_HEADERS.md`)
+- **LCP Optimization**: Critical images have explicit dimensions and priority hints
+
+## Accessibility
+
+- **WCAG Compliant**: Proper heading hierarchy (h1 → h2 → h3)
+- **Form Labels**: All inputs have associated labels or ARIA attributes
+- **Color Contrast**: Meets WCAG AA contrast requirements
+- **Keyboard Navigation**: Full keyboard support for interactive elements
+- **Screen Reader Support**: Semantic HTML and ARIA labels throughout
+
 ## Contributing
 
 This is a browser-only application with no backend. All processing happens client-side.
+
+### Adding New Tools
+
+To add a new tool to the Tools section:
+
+1. Create a new component in `src/components/tools/`
+2. Add a route in `src/App.tsx` (pathname check)
+3. Add entry to `src/components/tools/ToolsPage.tsx`
+4. Create redirect stub in `public/tools/[tool-name]/index.html` for GitHub Pages
+5. Update sitemap.xml with the new tool URL
 
 ## License
 
