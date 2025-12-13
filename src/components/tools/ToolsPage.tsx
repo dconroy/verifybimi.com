@@ -22,7 +22,7 @@ export function ToolsPage() {
           <div className="upload-area">
             <h2 style={{ marginTop: 0 }}>Tools</h2>
             <p>
-              <a href={homeHref}>Back to the converter</a>
+              <a href={homeHref}>Back to logo converter</a>
             </p>
           </div>
         </main>

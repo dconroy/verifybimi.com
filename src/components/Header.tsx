@@ -29,7 +29,7 @@ export function Header() {
 
       <div className="app-header-actions">
         {!isHome && (
-            <a className="header-nav-link" href={baseUrl}>Converter</a>
+            <a className="header-nav-link" href={baseUrl}>Logo Converter</a>
         )}
         
         <a className="header-nav-link" href={guideHref}>Guide</a>
