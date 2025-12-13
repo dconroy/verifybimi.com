@@ -99,7 +99,6 @@ function App() {
   }
 
   const guideHref = `${import.meta.env.BASE_URL}what-is-bimi/`;
-  const blogHref = `${import.meta.env.BASE_URL}blog/`;
   const toolsHref = `${import.meta.env.BASE_URL}tools/`;
   const dmarcHref = `${import.meta.env.BASE_URL}tools/dmarc/`;
   const bimiHref = `${import.meta.env.BASE_URL}tools/bimi/`;
@@ -228,11 +227,8 @@ function App() {
           <a className="header-cta" href={guideHref}>
             What is BIMI? Read the guide
           </a>
-          <a className="header-cta" href={blogHref}>
-            Guides
-          </a>
           <details className="header-tools">
-            <summary className="header-cta">Tools</summary>
+            <summary className="header-cta">BIMI Tools</summary>
             <div className="header-tools-menu" role="menu" aria-label="Tools menu">
               <a className="header-tools-item" href={toolsHref} role="menuitem">
                 Tools home
