@@ -91,7 +91,11 @@ export function parseDkimRecord(rawTxt: string, selector?: string): DkimParseRes
   // Validate required tags
   const v = tags['v'];
   if (v !== 'DKIM1') {
-    errors.push(`Invalid or missing DKIM version. Expected "v=DKIM1", found "${v || 'none'}".`);
+    if (!v) {
+      warnings.push('Missing DKIM version (v=DKIM1). technically required, but often omitted.');
+    } else {
+      errors.push(`Invalid DKIM version. Expected "v=DKIM1", found "${v}".`);
+    }
   }
 
   const k = tags['k'] || tags['key-type'] || 'rsa'; // default is RSA
@@ -125,7 +129,7 @@ export function parseDkimRecord(rawTxt: string, selector?: string): DkimParseRes
     }
   }
 
-  const isValid = errors.length === 0 && v === 'DKIM1' && !!p;
+  const isValid = errors.length === 0 && !!p;
 
   return {
     raw,
@@ -140,7 +144,20 @@ export function parseDkimRecord(rawTxt: string, selector?: string): DkimParseRes
 
 export function pickLikelyDkimRecord(txtAnswers: string[]): string | null {
   if (!txtAnswers.length) return null;
+  
+  // 1. Prefer explicit v=DKIM1
   const exact = txtAnswers.find((a) => a.toLowerCase().includes('v=dkim1'));
-  return exact || txtAnswers[0] || null;
+  if (exact) return exact;
+
+  // 2. Fallback to anything looking like a DKIM record (has p=... or k=...)
+  // This avoids picking up CNAME targets if the CNAME is returned in the answers.
+  const likely = txtAnswers.find((a) => {
+    const lower = a.toLowerCase();
+    return (lower.includes('p=') || lower.includes('k=')) && a.includes('=');
+  });
+  if (likely) return likely;
+
+  // 3. Last resort
+  return txtAnswers[0] || null;
 }
 
