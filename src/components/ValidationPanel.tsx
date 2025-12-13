@@ -83,11 +83,33 @@ export function ValidationPanel({ validation, isSvgSource }: ValidationPanelProp
       )}
 
       <div className="validation-next-steps">
-        <h3>Next steps (for BIMI)</h3>
-        <p style={{ marginTop: 0 }}>
-          BIMI eligibility typically requires an enforced DMARC policy (<code>p=quarantine</code> or <code>p=reject</code>).{' '}
-          <a href={dmarcToolHref}>Verify your DMARC record</a>.
+        <h3 style={{ marginTop: 0 }}>Next steps for BIMI</h3>
+        <p style={{ margin: '0 0 1.25rem', lineHeight: '1.6', color: 'var(--text-muted)' }}>
+          Creating this SVG is the first step. To display it in inboxes, your domain must be authenticated with 
+          an enforced DMARC policy (<code>p=quarantine</code> or <code>p=reject</code>).
         </p>
+        
+        <a 
+          href={dmarcToolHref} 
+          style={{ 
+            display: 'inline-flex', 
+            alignItems: 'center', 
+            gap: '0.5rem',
+            padding: '0.75rem 1.25rem', 
+            backgroundColor: 'var(--primary)', 
+            color: 'white', 
+            borderRadius: 'var(--radius-md)', 
+            textDecoration: 'none', 
+            fontWeight: 600,
+            fontSize: '0.95rem',
+            transition: 'transform 0.2s',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+          }}
+          onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-1px)'}
+          onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}
+        >
+          Check DMARC Status →
+        </a>
       </div>
     </div>
   );
