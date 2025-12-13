@@ -208,9 +208,9 @@ function App() {
       <main className="app-main">
         {/* Hero Section for Main Converter */}
         <div style={{ textAlign: 'center', marginBottom: '3rem', marginTop: '1rem' }}>
-          <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.025em' }}>BIMI Converter</h1>
+          <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.025em' }}>BIMI Logo Converter</h1>
           <p style={{ display: 'block', margin: '0 auto', fontSize: '1.25rem', maxWidth: '600px', color: 'var(--text-muted)', lineHeight: '1.6' }}>
-            Already have an SVG logo from your designer? This tool will turn it into a BIMI-ready SVG and validate it.
+            Upload your logo (SVG, PNG, or JPG) to automatically generate a compliant BIMI SVG file.
           </p>
         </div>
 
