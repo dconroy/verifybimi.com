@@ -7,6 +7,8 @@ import { EmailPreview } from './components/EmailPreview';
 import { ValidationPanel } from './components/ValidationPanel';
 import { Footer } from './components/Footer';
 import { BimiInfoPage } from './components/BimiInfoPage';
+import { ToolsPage } from './components/tools/ToolsPage';
+import { DmarcVerifierPage } from './components/tools/DmarcVerifierPage';
 import { convertToBimiSvg } from './core';
 import type { ConvertOptions, ValidationResult } from './core/types';
 import { downloadBimiSvg, copyToClipboard } from './utils/downloadUtils';
@@ -42,6 +44,14 @@ function App() {
       }
     }
 
+    if (pathname.includes('/tools/dmarc')) {
+      return <DmarcVerifierPage />;
+    }
+
+    if (pathname.includes('/tools')) {
+      return <ToolsPage />;
+    }
+
     if (pathname.includes('/what-is-bimi')) {
       return <BimiInfoPage />;
     }
@@ -49,6 +59,8 @@ function App() {
 
   const guideHref = `${import.meta.env.BASE_URL}what-is-bimi/`;
   const blogHref = `${import.meta.env.BASE_URL}blog/`;
+  const toolsHref = `${import.meta.env.BASE_URL}tools/`;
+  const dmarcHref = `${import.meta.env.BASE_URL}tools/dmarc/`;
 
   const [originalFile, setOriginalFile] = useState<File | null>(null);
   const [originalPreview, setOriginalPreview] = useState<string | null>(null);
@@ -168,6 +180,17 @@ function App() {
           <a className="header-cta" href={blogHref}>
             Guides
           </a>
+          <details className="header-tools">
+            <summary className="header-cta">Tools</summary>
+            <div className="header-tools-menu" role="menu" aria-label="Tools menu">
+              <a className="header-tools-item" href={toolsHref} role="menuitem">
+                Tools home
+              </a>
+              <a className="header-tools-item" href={dmarcHref} role="menuitem">
+                DMARC verifier
+              </a>
+            </div>
+          </details>
         </div>
       </header>
 

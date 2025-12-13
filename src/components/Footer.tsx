@@ -1,6 +1,7 @@
 export function Footer() {
   const infoHref = `${import.meta.env.BASE_URL}what-is-bimi/`;
   const blogHref = `${import.meta.env.BASE_URL}blog/`;
+  const dmarcToolHref = `${import.meta.env.BASE_URL}tools/dmarc/`;
 
   return (
     <footer className="app-footer">
@@ -32,7 +33,8 @@ export function Footer() {
           </p>
           <p className="footer-note">
             <strong>Note:</strong> Full BIMI implementation also requires a strict DMARC policy 
-            (p=quarantine or p=reject) and a published DNS TXT record.
+            (p=quarantine or p=reject) and a published DNS TXT record.{' '}
+            <a href={dmarcToolHref}>Verify your DMARC record</a>.
           </p>
         </div>
 

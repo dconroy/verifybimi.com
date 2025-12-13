@@ -15,6 +15,8 @@ export function ValidationPanel({ validation, isSvgSource }: ValidationPanelProp
     );
   }
 
+  const dmarcToolHref = `${import.meta.env.BASE_URL}tools/dmarc/`;
+
   const statusClass = validation.valid ? 'valid' : 'invalid';
   const statusIcon = validation.valid ? '✓' : '✗';
 
@@ -79,6 +81,14 @@ export function ValidationPanel({ validation, isSvgSource }: ValidationPanelProp
           </ul>
         </div>
       )}
+
+      <div className="validation-next-steps">
+        <h4>Next steps (for BIMI)</h4>
+        <p style={{ marginTop: 0 }}>
+          BIMI eligibility typically requires an enforced DMARC policy (<code>p=quarantine</code> or <code>p=reject</code>).{' '}
+          <a href={dmarcToolHref}>Verify your DMARC record</a>.
+        </p>
+      </div>
     </div>
   );
 }
